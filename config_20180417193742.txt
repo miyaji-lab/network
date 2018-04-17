@@ -1,0 +1,136 @@
+# RTX1210 Rev.14.01.14 (Mon May 30 15:09:02 2016)
+# MAC Address : 00:a0:de:f3:2e:95, 00:a0:de:f3:2e:96, 00:a0:de:f3:2e:97
+# Memory 256Mbytes, 3LAN, 1BRI
+# main:  RTX1210 ver=00 serial=S4H071548 MAC-Address=00:a0:de:f3:2e:95 MAC-Address=00:a0:de:f3:2e:96 MAC-Address=00:a0:de:f3:2e:97
+# Reporting Date: Apr 17 19:37:42 2018
+administrator password encrypted *
+login user admin *
+console character ja.utf8
+ip route default gateway 133.1.144.126
+ip keepalive 1 icmp-echo 10 5 133.1.144.126
+ip lan1 address 192.168.11.1/24
+ip lan1 proxyarp on
+switch control use lan1 on terminal=on
+switch control use lan2 on terminal=on
+vlan lan2/1 802.1q vid=101 name=VLAN101
+ip lan2/1 address 192.168.101.1/24
+vlan lan2/2 802.1q vid=102 name=VLAN102
+ip lan2/2 address 192.168.102.1/24
+vlan lan2/3 802.1q vid=103 name=VLAN103
+ip lan2/3 address 192.168.103.1/24
+description lan3 odins
+ip lan3 address 133.1.144.144/24
+ip lan3 secure filter in 102003 102020 102021 102022 102023 102024 102025 102028 102029 102030 102031 102032 102033 102034 102035 102036 102037 102038 102100 102101 102102 102103
+ip lan3 secure filter out 102013 102020 102021 102022 102023 102024 102025 102026 102027 102028 102029 102099 dynamic 102080 102081 102082 102083 102084 102085 102098 102099
+ip lan3 nat descriptor 300
+pp select anonymous
+ pp bind tunnel1-tunnel3
+ pp auth request mschap-v2
+ pp auth username kono yESI3CZFJhzuQCY6mrrm
+ pp auth username shishido kHpkL9JqnyNBjMDogBLq
+ pp auth username kodera vDsyOzyKcNm6jpUsIgX2
+ ppp ipcp ipaddress on
+ ppp ipcp msext on
+ ppp ccp type none
+ ip pp remote address pool dhcp
+ ip pp mtu 1258
+ pp enable anonymous
+tunnel select 1
+ tunnel encapsulation l2tp
+ ipsec tunnel 1
+  ipsec sa policy 1 1 esp aes-cbc sha256-hmac
+  ipsec ike keepalive use 1 off
+  ipsec ike nat-traversal 1 on
+  ipsec ike pre-shared-key 1 text oUOv9GBeqHmIVVy92KLR
+  ipsec ike remote address 1 any
+ l2tp tunnel disconnect time off
+ ip tunnel tcp mss limit auto
+ tunnel enable 1
+tunnel select 2
+ tunnel encapsulation l2tp
+ ipsec tunnel 2
+  ipsec sa policy 2 2 esp aes-cbc sha256-hmac
+  ipsec ike keepalive use 2 off
+  ipsec ike nat-traversal 2 on
+  ipsec ike pre-shared-key 2 text oUOv9GBeqHmIVVy92KLR
+  ipsec ike remote address 2 any
+ l2tp tunnel disconnect time off
+ ip tunnel tcp mss limit auto
+ tunnel enable 2
+tunnel select 3
+ tunnel encapsulation l2tp
+ ipsec tunnel 3
+  ipsec sa policy 3 3 esp aes-cbc sha256-hmac
+  ipsec ike keepalive use 3 off
+  ipsec ike nat-traversal 3 on
+  ipsec ike pre-shared-key 3 text oUOv9GBeqHmIVVy92KLR
+  ipsec ike remote address 3 any
+ l2tp tunnel disconnect time off
+ ip tunnel tcp mss limit auto
+ tunnel enable 3
+ip filter 102000 reject 10.0.0.0/8 * * * *
+ip filter 102001 reject 172.16.0.0/12 * * * *
+ip filter 102002 reject 192.168.0.0/16 * * * *
+ip filter 102003 reject 192.168.100.0/24 * * * *
+ip filter 102010 reject * 10.0.0.0/8 * * *
+ip filter 102011 reject * 172.16.0.0/12 * * *
+ip filter 102012 reject * 192.168.0.0/16 * * *
+ip filter 102013 reject * 192.168.100.0/24 * * *
+ip filter 102020 reject * * udp,tcp 135 *
+ip filter 102021 reject * * udp,tcp * 135
+ip filter 102022 reject * * udp,tcp netbios_ns-netbios_ssn *
+ip filter 102023 reject * * udp,tcp * netbios_ns-netbios_ssn
+ip filter 102024 pass 192.168.0.0/16 133.1.144.0/24 udp,tcp * 445
+ip filter 102025 pass 133.1.144.0/24 192.168.0.0/16 udp,tcp 445 *
+ip filter 102026 restrict * * tcpfin * www,21,nntp
+ip filter 102027 restrict * * tcprst * www,21,nntp
+ip filter 102028 reject * * udp,tcp 445 *
+ip filter 102029 reject * * udp,tcp * 445
+ip filter 102030 pass * 192.168.0.0/16 icmp * *
+ip filter 102031 pass * 192.168.0.0/16 established * *
+ip filter 102032 pass * 192.168.0.0/16 tcp * ident
+ip filter 102033 pass * 192.168.0.0/16 tcp ftpdata *
+ip filter 102034 pass * 192.168.0.0/16 tcp,udp * domain
+ip filter 102035 pass * 192.168.0.0/16 udp domain *
+ip filter 102036 pass * 192.168.0.0/16 udp * ntp
+ip filter 102037 pass * 192.168.0.0/16 udp ntp *
+ip filter 102099 pass * * * * *
+ip filter 102100 pass * 192.168.11.1 udp * 500
+ip filter 102101 pass * 192.168.11.1 esp * *
+ip filter 102102 pass * 192.168.11.1 udp * 4500
+ip filter 102103 pass * 192.168.11.1 udp * 1701
+ip filter 500000 restrict * * * * *
+ip filter dynamic 102080 * * ftp
+ip filter dynamic 102081 * * domain
+ip filter dynamic 102082 * * www
+ip filter dynamic 102083 * * smtp
+ip filter dynamic 102084 * * pop3
+ip filter dynamic 102085 * * submission
+ip filter dynamic 102098 * * tcp
+ip filter dynamic 102099 * * udp
+nat descriptor type 300 masquerade
+nat descriptor address outer 300 primary
+nat descriptor masquerade static 300 1 192.168.11.1 udp 500
+nat descriptor masquerade static 300 2 192.168.11.1 esp
+nat descriptor masquerade static 300 3 192.168.11.1 udp 4500
+nat descriptor masquerade static 300 4 192.168.11.1 udp 1701
+ipsec auto refresh on
+ipsec transport 1 1 udp 1701
+ipsec transport 2 2 udp 1701
+ipsec transport 3 3 udp 1701
+dhcp service server
+dhcp server rfc2131 compliant except remain-silent
+dhcp scope 1 192.168.11.2-192.168.11.191/24
+dhcp scope 2 192.168.21.2-192.168.21.191/24
+dhcp scope 5 192.168.51.2-192.168.51.191/24
+dhcp scope 20101 192.168.101.2-192.168.101.93/24
+dhcp scope 20102 192.168.102.2-192.168.102.199/24
+dns host lan1
+dns server 133.1.192.5 133.1.181.5
+dns server select 500202 133.1.192.5 133.1.181.5 any .
+dns private address spoof on
+l2tp service on
+httpd host lan
+sshd service on
+sshd host key generate *
+dashboard accumulate traffic on
